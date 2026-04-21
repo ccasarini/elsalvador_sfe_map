@@ -6,41 +6,41 @@
     <title>El Salvador Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
-        body { margin: 0; padding: 0; background: #f0f7ff; overflow: hidden; }
+        body { margin: 0; padding: 0; background: #ffffff; overflow: hidden; }
         #map { 
             height: 100vh; 
             width: 100vw; 
-            background: #f0f7ff; /* Vibrant light sky background */
+            background: #ffffff;
         }
         .map-header {
             position: absolute;
-            top: 24px;
-            left: 24px;
+            top: 30px;
+            left: 30px;
             z-index: 1000;
-            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-            padding: 14px 28px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: #1e293b;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            font-family: 'Inter', sans-serif;
         }
         .map-header h1 {
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #ffffff;
-            font-weight: 800;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            letter-spacing: -0.02em;
+            gap: 12px;
         }
         .country-label {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             white-space: nowrap;
             display: flex;
             justify-content: center;
@@ -48,35 +48,33 @@
             pointer-events: none;
         }
         .label-es {
-            color: #1e3a8a;
-            font-size: 28px; /* Larger for image export */
-            font-weight: 800;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,1));
+            color: #0f172a;
+            font-size: 32px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
             pointer-events: none;
         }
         .label-community {
-            color: #ea580c; /* Vibrant Orange */
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 16px; /* Larger for image export */
-            font-weight: 800;
+            color: #7c3aed; /* Vibrant Purple */
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
             text-transform: none;
             text-align: center;
             line-height: 1.1;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,1));
+            filter: drop-shadow(0 0 12px rgba(255,255,255,1));
             pointer-events: none;
         }
         .community-pin {
-            background: #f97316; /* Vibrant Orange */
-            border: 2px solid white;
+            background: #8b5cf6; /* Vibrant Purple */
+            border: 3px solid white;
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.5);
         }
         .label-neighbor {
-            color: #475569;
-            font-size: 20px; /* Larger for image export */
-            font-weight: 700;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.9));
+            color: #94a3b8;
+            font-size: 22px;
+            font-weight: 400;
         }
         .leaflet-control-attribution {
             display: none !important;
@@ -101,36 +99,34 @@
         dragging: true
     }).setView([13.85, -88.9], 9);
 
-    // Styles
     const focusStyle = {
-        fillColor: "#4f46e5", // Bold Indigo
-        color: "#312e81",     // Dark Indigo border
-        weight: 3,
+        fillColor: "#1e293b", // Deep Slate
+        color: "#0f172a",     // Midnight border
+        weight: 1.5,
         opacity: 1,
-        fillOpacity: 0.15
+        fillOpacity: 0.85     // Solid, modern look
     };
 
     const communityStyle = {
         fillColor: "#ffffff",
-        color: "#ea580c", // Vibrant Orange border
-        weight: 2,
+        color: "#7c3aed", // Vibrant Purple
+        weight: 3,
         opacity: 1,
-        fillOpacity: 0.6
+        fillOpacity: 0.7
     };
 
     const backgroundStyle = {
-        fillColor: "#94a3b8",
-        color: "#64748b",
-        weight: 1.5,
-        opacity: 0.4,
-        fillOpacity: 0.08
+        fillColor: "transparent", // No fill for neighbors for a sleeker look
+        color: "#e2e8f0",
+        weight: 2,
+        opacity: 1
     };
 
     function addLabel(latlng, text, extraClass = '') {
         const labelIcon = L.divIcon({
             className: `country-label ${extraClass}`,
             html: text,
-            iconSize: [160, 40]
+            iconSize: [200, 50]
         });
         L.marker(latlng, { icon: labelIcon, interactive: false }).addTo(map);
     }
@@ -145,7 +141,6 @@
             const data = await caRes.json();
             const sfeData = await sfeRes.json();
 
-            // Filter the unified data for our target countries
             const esFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'SLV');
             const gtmFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'GTM');
             const hndFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'HND');
@@ -162,24 +157,19 @@
             L.marker(sfeCoords, {
                 icon: L.divIcon({
                     className: 'community-pin',
-                    iconSize: [16, 16],
-                    iconAnchor: [8, 16]
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 20]
                 }),
                 interactive: false
             }).addTo(map);
 
-            // Add Labels - Tighter composition for image export
-            // Guatemala: Moved closer to border and more central
-            addLabel([14.25, -90.1], 'Guatemala', 'label-neighbor');
-            
-            // Honduras: Moved closer to border
-            addLabel([14.2, -88.4], 'Honduras', 'label-neighbor');
-            
-            // El Salvador: Moved slightly higher for a more central feel
+            // Tight composition for high-end image export
+            addLabel([14.2, -90.2], 'Guatemala', 'label-neighbor');
+            addLabel([14.15, -88.3], 'Honduras', 'label-neighbor');
             addLabel([13.65, -88.9], 'El Salvador', 'label-es'); 
             
-            // Community label
-            addLabel([13.98, -88.95], 'San Francisco<br>Echeverría', 'label-community');
+            // Community label - prominent and modern
+            addLabel([14.02, -88.95], 'San Francisco<br>Echeverría', 'label-community');
 
         } catch (error) {
             console.error('Error rendering map:', error);
