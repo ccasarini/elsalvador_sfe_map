@@ -108,18 +108,20 @@
 
     async function loadMap() {
         try {
-            const [es, gtm, hnd] = await Promise.all([
-                fetch('el_salvador.geojson').then(r => r.json()),
-                fetch('guatemala.geojson').then(r => r.json()),
-                fetch('honduras.geojson').then(r => r.json())
-            ]);
+            const response = await fetch('central_america.geojson');
+            const data = await response.json();
 
-            L.geoJSON(gtm, { style: backgroundStyle }).addTo(map);
-            L.geoJSON(hnd, { style: backgroundStyle }).addTo(map);
-            L.geoJSON(es, { style: focusStyle }).addTo(map);
+            // Filter the unified data for our target countries
+            const esFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'SLV');
+            const gtmFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'GTM');
+            const hndFeature = data.features.find(f => f.properties['ISO3166-1-Alpha-3'] === 'HND');
 
-            // Guatemala: Moved down significantly (14.5 -> 14.1)
-            addLabel([14.1, -90.2], 'Guatemala', 'label-neighbor');
+            if (gtmFeature) L.geoJSON(gtmFeature, { style: backgroundStyle }).addTo(map);
+            if (hndFeature) L.geoJSON(hndFeature, { style: backgroundStyle }).addTo(map);
+            if (esFeature) L.geoJSON(esFeature, { style: focusStyle }).addTo(map);
+
+            // Guatemala: Moved down slightly more (14.1 -> 14.0)
+            addLabel([14.0, -90.2], 'Guatemala', 'label-neighbor');
             
             // Honduras: Maintained Westward position
             addLabel([14.3, -88.5], 'Honduras', 'label-neighbor');
