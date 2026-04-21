@@ -43,10 +43,9 @@
         }
         .community-pin {
             background: #f97316; /* Vibrant Orange */
-            border: 3px solid white;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            box-shadow: 0 8px 16px rgba(249, 115, 22, 0.3);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3), 0 4px 12px rgba(0,0,0,0.1);
         }
         .label-neighbor {
             color: #94a3b8;
@@ -127,13 +126,13 @@
             // Community Border
             L.geoJSON(sfeData, { style: communityStyle }).addTo(map);
 
-            // Community Pin
+            // Community Pin - Smoother circular style
             const sfeCoords = [13.8833, -88.9500];
             L.marker(sfeCoords, {
                 icon: L.divIcon({
                     className: 'community-pin',
                     iconSize: [18, 18],
-                    iconAnchor: [9, 18]
+                    iconAnchor: [9, 9] // Centered for the circle
                 }),
                 interactive: false
             }).addTo(map);
