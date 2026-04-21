@@ -175,8 +175,8 @@
             // El Salvador: Central but shifted south to balance neighbors
             addLabel([13.62, -88.9], 'El Salvador', 'label-es'); 
             
-            // Community label - Lowered to be tighter to the pin and extra clear
-            addLabel([13.91, -88.95], 'San Francisco<br>Echeverría', 'label-community');
+            // Community label - Moved further North to avoid overlapping with the pin
+            addLabel([13.98, -88.95], 'San Francisco<br>Echeverría', 'label-community');
 
         } catch (error) {
             console.error('Error rendering map:', error);
@@ -192,11 +192,6 @@
     }
 
     loadMap();
-</script>
-
-    loadMap();
-</script>
-
 </script>
 </body>
 </html>
