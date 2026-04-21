@@ -57,12 +57,12 @@
         .label-community {
             color: #c2410c; /* Deep Amber/Orange */
             font-family: 'Inter', sans-serif;
-            font-size: 17px;
+            font-size: 18px; /* Slightly larger for extra clarity */
             font-weight: 900;
             text-transform: none;
             text-align: center;
             line-height: 1;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,1));
+            filter: drop-shadow(0 0 12px rgba(255,255,255,1)) drop-shadow(0 0 4px rgba(255,255,255,1));
             pointer-events: none;
         }
         .community-pin {
@@ -165,13 +165,18 @@
                 interactive: false
             }).addTo(map);
 
-            // Extreme tight composition for professional image export
-            addLabel([14.12, -89.7], 'Guatemala', 'label-neighbor');
-            addLabel([14.05, -88.5], 'Honduras', 'label-neighbor');
-            addLabel([13.68, -88.9], 'El Salvador', 'label-es'); 
+            // Precise composition: Labels near borders but strictly outside
+            // Guatemala: Moved to a safe but close North-West position
+            addLabel([14.28, -90.1], 'Guatemala', 'label-neighbor');
             
-            // Community label - pulled closer to the pin
-            addLabel([13.93, -88.95], 'San Francisco<br>Echeverría', 'label-community');
+            // Honduras: Moved to a safe but close North-East position
+            addLabel([14.22, -88.3], 'Honduras', 'label-neighbor');
+            
+            // El Salvador: Central but shifted south to balance neighbors
+            addLabel([13.62, -88.9], 'El Salvador', 'label-es'); 
+            
+            // Community label - Lowered to be tighter to the pin and extra clear
+            addLabel([13.91, -88.95], 'San Francisco<br>Echeverría', 'label-community');
 
         } catch (error) {
             console.error('Error rendering map:', error);
